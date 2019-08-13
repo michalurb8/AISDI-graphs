@@ -1,7 +1,7 @@
-## A solution to a graph problem posted below.
-Some example graphs provided in txt files.
-Run like instructed:
-    > ./program < file.txt
+## A solution to a graph problem posted below.  
+Some example graphs provided in txt files.  
+Run like instructed:  
+    > ./program < file.txt  
 
 ---
 
