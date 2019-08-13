@@ -1,4 +1,2 @@
 all:
-	g++ -g -Wall main.cpp -o program
-run:
-	./program < big_some.txt
+	g++ -O3 main.cpp -o program

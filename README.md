@@ -1,8 +1,10 @@
-A solution to the problem posted below.
+## A solution to a graph problem posted below.
 Some example graphs provided in txt files.
 Run like instructed:
-> ./program < file.txt
+    > ./program < file.txt
+
 ---
+
 # AISDI - projekt z algorytmów grafowych
 
 *Mostem* w grafie spójnym nazywamy krawędź, której usunięcie powoduje jego rozspójnienie (powstały w wyniku usunięcia krawędzi graf jest niespójny). Na potrzeby niniejszego zadania, *mostem rozległym* w grafie spójnym będziemy nazywać taką krawędź, że usunięcię obu jej końców (wierzchołków) powoduje rozspójnienie grafu. Operacja usunięcia wierzchołka oznacza również usunięcie wszystkich krawędzi, których jest końcem.

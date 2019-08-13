@@ -11,29 +11,29 @@ struct Vertex
 };
 struct Graph
 {
-	Vertex* tab;
+	Vertex* vertices;
 	unsigned int size;
 	Graph (unsigned int sizeArg)
 	: size(sizeArg)
 	{
-		tab = new Vertex[sizeArg];
+		vertices = new Vertex[sizeArg];
 	}
 	~Graph()
 	{
-		delete[] tab;
+		delete[] vertices;
 	}
 	void TurnAllOff()
 	{
-		for(unsigned int i = 0; i < size; ++i) tab[i].state = false;
+		for(unsigned int i = 0; i < size; ++i) vertices[i].state = false;
 	}
 	void TurnOnRecursively(unsigned int current, unsigned int arg1, unsigned int arg2)
 	{
 		unsigned int temp = 0;
-		if(tab[current].state) return;
-		tab[current].state = true;
-		for(unsigned int i = 0; i < tab[current].edges.size(); ++i)
+		if(vertices[current].state) return;
+		vertices[current].state = true;
+		for(unsigned int i = 0; i < vertices[current].edges.size(); ++i)
 		{
-			temp = tab[current].edges[i];
+			temp = vertices[current].edges[i];
 			if(temp==arg1 || temp==arg2) continue;
 			TurnOnRecursively(temp, arg1, arg2);
 		}
@@ -42,15 +42,25 @@ struct Graph
 	{
 		for(unsigned int i = 0; i < size; ++i) 
 		{
-			if(i==arg1 || i==arg2) continue;
-			if(!tab[i].state) return false;
+			if(!vertices[i].state) return false;
 		}
 		return true;
 	}
 	void AddEdge(unsigned int arg1, unsigned int arg2)
 	{
-		tab[arg1].edges.push_back(arg2);			//if index1 is connected to index2:
-		tab[arg2].edges.push_back(arg1);			//pushback them to each others vector
+		vertices[arg1].edges.push_back(arg2);			//if index1 is connected to index2:
+		vertices[arg2].edges.push_back(arg1);			//pushback them to each others vector
+	}
+	bool IsBridge(unsigned int arg1, unsigned int arg2)
+	{
+		TurnAllOff();
+		vertices[arg1].state = true;
+		vertices[arg2].state = true;
+		if(arg1!=0 && arg2!=0) TurnOnRecursively(0, arg1, arg2);//recursively turning neighbours on
+		else if(arg1!=1 && arg2!=1) TurnOnRecursively(1, arg1, arg2);
+		else TurnOnRecursively(2, arg1, arg2);
+		if(AreAllOn(arg1, arg2)) return false;
+		else return true;
 	}
 };
 
@@ -69,15 +79,11 @@ int main()
 		graph.AddEdge(index1, index2);
 	}
 	for(unsigned int ind = 0; ind < graphSize; ++ind)	//for each vertex
-		for(unsigned int j = 0; j < graph.tab[ind].edges.size(); ++j)//for its every neighbour
+		for(unsigned int j = 0; j < graph.vertices[ind].edges.size(); ++j)//for its every neighbour
 		{	
-			unsigned int nei = graph.tab[ind].edges[j];	//ind-nei is checked for being a bridge
-			if(nei <= ind) continue;
-			graph.TurnAllOff();							//turning all vertices off
-			if(ind!=0 && nei!=0) graph.TurnOnRecursively(0, ind, nei);//recursively turning neighbours on
-			else if(ind!=1 && nei!=1) graph.TurnOnRecursively(1, ind, nei);
-			else graph.TurnOnRecursively(2, ind, nei);
-			if(graph.AreAllOn(ind, nei)) continue;		//if all are turned on the graph is connected
+			unsigned int nei = graph.vertices[ind].edges[j];	//ind-nei is checked for being a bridge
+			if(ind >= nei) continue;
+			if(!graph.IsBridge(ind, nei)) continue;		//if all are turned on the graph is connected
 			std::cout << ind << " " << nei << std::endl;//if not, ind-nei is a bridge
 		}
 	return 0;	
