@@ -1,6 +1,6 @@
 ## A solution to a graph problem posted below.  
 Some example graphs provided in txt files.  
-Run like instructed:  
+Run as instructed:  
     > ./program < file.txt  
 
 ---
