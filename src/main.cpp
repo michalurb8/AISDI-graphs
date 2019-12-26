@@ -14,7 +14,7 @@ struct Graph
 	Vertex* vertices;
 	unsigned int size;
 	Graph (unsigned int sizeArg)
-	: size(sizeArg)
+	:size(sizeArg)
 	{
 		vertices = new Vertex[sizeArg];
 	}
@@ -29,7 +29,7 @@ struct Graph
 	void TurnOnRecursively(unsigned int current, unsigned int arg1, unsigned int arg2)
 	{
 		unsigned int temp = 0;
-		if(vertices[current].state) return;
+		if(vertices[current].state == true) return;
 		vertices[current].state = true;
 		for(unsigned int i = 0; i < vertices[current].edges.size(); ++i)
 		{
@@ -42,14 +42,14 @@ struct Graph
 	{
 		for(unsigned int i = 0; i < size; ++i) 
 		{
-			if(!vertices[i].state) return false;
+			if(vertices[i].state == false) return false;
 		}
 		return true;
 	}
 	void AddEdge(unsigned int arg1, unsigned int arg2)
 	{
 		vertices[arg1].edges.push_back(arg2);			//if index1 is connected to index2:
-		vertices[arg2].edges.push_back(arg1);			//pushback them to each others vector
+		vertices[arg2].edges.push_back(arg1);			//push them back to each others' vector
 	}
 	bool IsBridge(unsigned int arg1, unsigned int arg2)
 	{
@@ -64,21 +64,27 @@ struct Graph
 	}
 };
 
-int main() 
+void ReadFromFile(Graph& g)
 {
 	unsigned int graphSize, index1, index2;
 	std::string input;
 	std::getline(std::cin, input);
 	graphSize = atoi(input.c_str());
-	if(graphSize < 4) return 0;							//No bridges if there are less than 4 vertices 
-	Graph graph(graphSize);
+	Graph graph = Graph(graphSize);
 	while(std::getline(std::cin, input))
 	{
 		std::stringstream ss(input);
 		ss >> index1 >> index2;
 		graph.AddEdge(index1, index2);
 	}
-	for(unsigned int ind = 0; ind < graphSize; ++ind)	//for each vertex
+}
+
+int main() 
+{
+	Graph graph(1);
+	ReadFromFile(graph);
+	if(graph.size < 4) return 0;						//No bridges if there are less than 4 vertices 
+	for(unsigned int ind = 0; ind < graph.size; ++ind)	//for each vertex
 		for(unsigned int j = 0; j < graph.vertices[ind].edges.size(); ++j)//for its every neighbour
 		{	
 			unsigned int nei = graph.vertices[ind].edges[j];	//ind-nei is checked for being a bridge
