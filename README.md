@@ -1,7 +1,8 @@
 ## A solution to a graph problem posted below.  
 Some example graphs are provided in .txt files.  
 Run as instructed:  
-* `./program < file.txt `
+
+    >./program < file.txt
 
 ---
 
